@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ParadisTrim.Core holds everything that is NOT user interface:
+    reading media information, the trim selection rules, output file naming,
+    and running FFmpeg. It has no Windows-only code, so it can be tested
+    automatically on any machine.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>ParadisTrim.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ParadisTrim.Tests" />
+  </ItemGroup>
+
+</Project>

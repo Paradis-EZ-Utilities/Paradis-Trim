@@ -1,0 +1,42 @@
+<Window x:Class="ParadisTrim.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings"
+        Icon="Assets/ParadisTrim.ico"
+        Width="440" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{StaticResource WindowBrush}"
+        FontFamily="Segoe UI" FontSize="14" Foreground="{StaticResource TextBrush}" UseLayoutRounding="True">
+    <!-- A deliberately small window: only the few preferences that are worth changing. -->
+    <StackPanel Margin="24,20,24,20">
+
+        <TextBlock Text="FILE NAME" Style="{StaticResource SectionLabel}" />
+        <TextBlock Text="Ending added to the name of each trimmed copy" Margin="0,8,0,6" />
+        <TextBox x:Name="SuffixBox" Style="{StaticResource DarkTextBox}" MaxLength="40"
+                 TextChanged="OnSuffixChanged" AutomationProperties.Name="File name ending" />
+        <TextBlock x:Name="SuffixExampleText" Foreground="{StaticResource SubtleTextBrush}" FontSize="12" Margin="0,6,0,0"
+                   TextTrimming="CharacterEllipsis" />
+        <TextBlock x:Name="SuffixErrorText" Foreground="{StaticResource WarningTextBrush}" FontSize="12" Margin="0,4,0,0"
+                   TextWrapping="Wrap" Visibility="Collapsed" />
+
+        <TextBlock Text="AFTER SAVING" Style="{StaticResource SectionLabel}" Margin="0,22,0,0" />
+        <Grid Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Open output folder after saving" VerticalAlignment="Center" />
+            <ToggleButton x:Name="OpenFolderToggle" Grid.Column="1" Style="{StaticResource Switch}"
+                          AutomationProperties.Name="Open output folder after saving" />
+        </Grid>
+
+        <TextBlock Foreground="{StaticResource SubtleTextBrush}" FontSize="12" Margin="0,22,0,0" TextWrapping="Wrap"
+                   Text="To choose where trimmed copies are saved, use SAVE TO on the main screen." />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Style="{StaticResource SecondaryButton}" Content="Cancel" MinWidth="80" IsCancel="True" Click="OnCancelClick" />
+            <Button x:Name="SaveButton" Style="{StaticResource PrimaryButton}" Content="Save" FontSize="13" Padding="18,7"
+                    MinWidth="80" Margin="8,0,0,0" IsDefault="True" Click="OnSaveClick" />
+        </StackPanel>
+    </StackPanel>
+</Window>

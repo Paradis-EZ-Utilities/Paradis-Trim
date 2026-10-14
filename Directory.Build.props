@@ -1,0 +1,14 @@
+<Project>
+  <!-- Settings shared by every project in the solution. -->
+  <PropertyGroup>
+    <!-- The one version number for the whole app. Also update AppInfo.Version and RELEASE-NOTES.md. -->
+    <Version>1.0.2</Version>
+    <!-- Show plain "1.0.2" in Windows' file properties, without a source-control suffix. -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- No debugging symbol files in the release folder. -->
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The Windows app: the window, the timeline and the preview. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ParadisTrim</RootNamespace>
+    <AssemblyName>ParadisTrim</AssemblyName>
+    <ApplicationIcon>Assets\ParadisTrim.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+
+    <Product>Paradis Trim</Product>
+    <Company>Paradis EZ Utilities</Company>
+    <Description>A simple way to cut audio and video down to the part you actually want.</Description>
+    <Copyright>Copyright © 2026 Paradis EZ Utilities</Copyright>
+
+    <!-- Lets the app be built from Linux/macOS too (the result still only runs on Windows). -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <!-- Release packaging: one self-contained Paradis Trim.exe; no .NET install needed. -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ParadisTrim.Core\ParadisTrim.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\ParadisTrim.ico" />
+    <Resource Include="Assets\ParadisTrim.png" />
+  </ItemGroup>
+
+  <!-- The bundled FFmpeg programs are copied to an "ffmpeg" folder next to the app. -->
+  <ItemGroup>
+    <None Include="..\..\third_party\ffmpeg\win-x64\*.*"
+          Link="ffmpeg\%(Filename)%(Extension)"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest"
+          ExcludeFromSingleFile="true" />
+  </ItemGroup>
+
+</Project>

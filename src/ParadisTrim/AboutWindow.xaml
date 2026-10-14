@@ -1,0 +1,52 @@
+<Window x:Class="ParadisTrim.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:ParadisTrim.Controls"
+        Title="About Paradis Trim"
+        Icon="Assets/ParadisTrim.ico"
+        Width="430" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{StaticResource WindowBrush}"
+        FontFamily="Segoe UI" FontSize="14" Foreground="{StaticResource TextBrush}" UseLayoutRounding="True">
+    <StackPanel Margin="24,22,24,20">
+        <StackPanel Orientation="Horizontal">
+            <Image Source="Assets/ParadisTrim.png" Width="48" Height="48" Margin="0,0,14,0"
+                   RenderOptions.BitmapScalingMode="HighQuality" />
+            <StackPanel VerticalAlignment="Center">
+                <controls:Wordmark Height="22" HorizontalAlignment="Left" />
+                <TextBlock x:Name="TaglineText" Foreground="{StaticResource SubtleTextBrush}" FontSize="12" Margin="1,1,0,0" />
+            </StackPanel>
+        </StackPanel>
+
+        <TextBlock x:Name="VersionText" Margin="0,18,0,0" />
+        <TextBlock x:Name="DescriptionText" TextWrapping="Wrap" Margin="0,6,0,0" Foreground="{StaticResource SubtleTextBrush}" FontSize="13" />
+
+        <!-- The collection this app belongs to. -->
+        <Border Margin="0,16,0,0" Padding="14,12" CornerRadius="6" Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Text="PART OF" Style="{StaticResource SectionLabel}" />
+                <TextBlock x:Name="FamilyText" FontSize="14" FontWeight="SemiBold" Margin="0,2,0,0" />
+                <TextBlock Foreground="{StaticResource SubtleTextBrush}" FontSize="12" Margin="0,4,0,0" Text="Simple tools for simple jobs." />
+            </StackPanel>
+        </Border>
+
+        <TextBlock TextWrapping="Wrap" Margin="0,14,0,0" Foreground="{StaticResource SubtleTextBrush}" FontSize="13"
+                   Text="Your media stays on your computer. Paradis Trim processes files locally and does not upload them." />
+
+        <!-- Links. A web link whose address isn't set yet (in AppInfo.cs) is hidden. -->
+        <StackPanel Margin="-4,12,0,0">
+            <Button x:Name="MoreLink" Style="{StaticResource LinkButton}" Content="More from Paradis EZ Utilities ↗" HorizontalAlignment="Left" Click="OnLinkClick" />
+            <Button x:Name="SourceLink" Style="{StaticResource LinkButton}" Content="View Source ↗" HorizontalAlignment="Left" Click="OnLinkClick" />
+            <Button x:Name="SupportLink" Style="{StaticResource LinkButton}" Content="Support / Donate ↗" HorizontalAlignment="Left" Click="OnLinkClick" />
+            <Button Style="{StaticResource LinkButton}" Content="Third-party notices" HorizontalAlignment="Left" Click="OnNoticesClick" />
+            <Button Style="{StaticResource LinkButton}" Content="Diagnostic log" HorizontalAlignment="Left" Click="OnLogClick"
+                    ToolTip="Technical details that can help when something goes wrong. Nothing is ever sent anywhere." />
+        </StackPanel>
+        <TextBlock x:Name="LinkProblemText" Foreground="{StaticResource WarningTextBrush}" FontSize="12" Margin="0,6,0,0"
+                   TextWrapping="Wrap" Visibility="Collapsed" />
+
+        <Button Style="{StaticResource SecondaryButton}" Content="Close" HorizontalAlignment="Right" Margin="0,14,0,0" MinWidth="80"
+                IsCancel="True" IsDefault="True" Click="OnCloseClick" />
+    </StackPanel>
+</Window>

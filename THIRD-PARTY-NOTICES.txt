@@ -1,0 +1,67 @@
+PARADIS TRIM - THIRD-PARTY NOTICES
+==================================
+
+Paradis Trim's own code is under the MIT License (see LICENSE.txt).
+The release also contains the third-party software listed below, each under
+its own license. The full license texts are in the "licenses" folder.
+
+
+1. FFmpeg 8.1.2  (folder: ffmpeg)
+---------------------------------
+Files: ffmpeg.exe, ffprobe.exe, avcodec-62.dll, avformat-62.dll,
+       avfilter-11.dll, avutil-60.dll, swresample-6.dll, swscale-9.dll
+Website: https://ffmpeg.org
+
+This FFmpeg was built for Paradis Trim with "--enable-gpl" and includes the
+x264 and x265 encoders. As a result these FFmpeg files are licensed under the
+GNU General Public License, version 2 or (at your option) any later version.
+  licenses/GPL-2.0.txt, licenses/FFmpeg-LICENSE.md.txt
+
+Paradis Trim runs ffmpeg.exe and ffprobe.exe as separate programs. They are
+unmodified builds of the upstream sources.
+
+The FFmpeg build contains these libraries:
+
+  * x264 (0.165.3223, git 0480cb0) - H.264 video encoder
+    Copyright (C) VideoLAN and the x264 authors. GPL v2 or later.
+    https://www.videolan.org/developers/x264.html
+    licenses/x264-COPYING.txt
+
+  * x265 4.1 - HEVC video encoder
+    Copyright (C) MulticoreWare, Inc. GPL v2 or later.
+    https://www.x265.org   licenses/x265-COPYING.txt
+
+  * LAME 3.100 - MP3 encoder
+    Copyright (C) the LAME project. GNU Library GPL v2 (or later).
+    https://lame.sourceforge.io
+    licenses/LAME-COPYING.txt, licenses/LAME-LICENSE.txt
+
+  * zlib 1.3.1 (zlib1.dll) - compression
+    Copyright (C) 1995-2022 Jean-loup Gailly and Mark Adler. zlib license.
+    https://zlib.net   licenses/zlib-LICENSE.txt
+
+  * Compiler runtime: built with the mingw-w64 GCC 13 cross compiler. Parts of
+    the GCC runtime (libgcc, libstdc++) are statically included under the GCC
+    Runtime Library Exception; mingw-w64 runtime files are under permissive
+    licenses (see https://www.mingw-w64.org).
+
+SOURCE CODE FOR THE FFMPEG FILES
+The complete corresponding source code for every file in the "ffmpeg" folder
+(the unmodified upstream source archives of FFmpeg, x264, x265, LAME and zlib,
+plus the exact build script) is published together with this release as:
+
+    ParadisTrim-1.0.1-ffmpeg-source.zip
+
+If you received Paradis Trim without that file, ask whoever gave you Paradis
+Trim for it; they are required to provide it. The same sources are also
+available from the Ubuntu archive (https://archive.ubuntu.com/ubuntu/pool/)
+under the file names listed in that ZIP's README.
+
+
+2. Microsoft .NET 10 runtime and WPF  (built into Paradis Trim.exe)
+--------------------------------------------------------------------
+Copyright (c) .NET Foundation and Contributors. MIT License.
+https://github.com/dotnet/runtime  https://github.com/dotnet/wpf
+licenses/dotnet-runtime-LICENSE.txt
+licenses/dotnet-windowsdesktop-LICENSE.txt
+licenses/dotnet-runtime-THIRD-PARTY-NOTICES.txt

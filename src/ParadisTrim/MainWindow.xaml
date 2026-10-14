@@ -1,0 +1,227 @@
+<Window x:Class="ParadisTrim.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:ParadisTrim.Controls"
+        Title="Paradis Trim"
+        Icon="Assets/ParadisTrim.ico"
+        Width="980" Height="760" MinWidth="720" MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource WindowBrush}"
+        FontFamily="Segoe UI" FontSize="14" Foreground="{StaticResource TextBrush}"
+        UseLayoutRounding="True"
+        AllowDrop="True"
+        PreviewDragEnter="OnDragOver" PreviewDragOver="OnDragOver" PreviewDragLeave="OnDragLeave" PreviewDrop="OnDrop"
+        PreviewKeyDown="OnPreviewKeyDown"
+        Closing="OnClosing">
+
+    <Grid Margin="24,16,24,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- ===== Brand header: PARADIS EZ TRIM on the left, a few quiet links on the right ===== -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,12" LastChildFill="True">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button x:Name="OpenAnotherButton" Style="{StaticResource HeaderLinkButton}" Content="Open a different file"
+                        Click="OnChooseFileClick" Visibility="Collapsed" Margin="0,0,6,0" />
+                <Button x:Name="SettingsButton" Style="{StaticResource HeaderLinkButton}" Content="Settings" Click="OnSettingsClick" Margin="0,0,6,0" />
+                <Button Style="{StaticResource HeaderLinkButton}" Content="About" Click="OnAboutClick" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <controls:Wordmark Height="26" HorizontalAlignment="Left" />
+                <TextBlock x:Name="TaglineText" Foreground="{StaticResource SubtleTextBrush}" FontSize="12" Margin="1,1,0,0" />
+            </StackPanel>
+        </DockPanel>
+
+        <!-- ===== The open file's name and length ===== -->
+        <StackPanel x:Name="FileHeader" Grid.Row="1" Orientation="Vertical" Margin="0,0,0,10" Visibility="Collapsed">
+            <TextBlock x:Name="FileNameText" FontSize="18" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+            <TextBlock x:Name="FileLengthText" Foreground="{StaticResource SubtleTextBrush}" FontSize="13" />
+        </StackPanel>
+
+        <!-- ===== Empty state: the big drop area ===== -->
+        <Grid x:Name="EmptyPanel" Grid.Row="2">
+            <Border x:Name="DropZone" CornerRadius="14" Background="{StaticResource SurfaceBrush}">
+                <Grid>
+                    <Rectangle x:Name="DropZoneOutline" RadiusX="14" RadiusY="14" Stroke="{StaticResource BorderBrush}"
+                               StrokeThickness="2" StrokeDashArray="5 4" SnapsToDevicePixels="True" />
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image Source="Assets/ParadisTrim.png" Width="72" Height="72" Margin="0,0,0,22" />
+                        <TextBlock Text="Drop an audio or video file here" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                        <TextBlock Text="or" Foreground="{StaticResource SubtleTextBrush}" HorizontalAlignment="Center" Margin="0,12,0,12" />
+                        <Button x:Name="ChooseFileButton" Style="{StaticResource PrimaryButton}" Content="Choose File"
+                                HorizontalAlignment="Center" Click="OnChooseFileClick" />
+                        <TextBlock x:Name="FormatsText" Foreground="{StaticResource SubtleTextBrush}" FontSize="12"
+                                   HorizontalAlignment="Center" Margin="0,26,0,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- ===== Opening a file ===== -->
+        <StackPanel x:Name="LoadingPanel" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+            <TextBlock Text="Opening…" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,12" />
+            <ProgressBar Style="{StaticResource SlimProgressBar}" IsIndeterminate="True" Width="220" />
+        </StackPanel>
+
+        <!-- ===== A file is loaded: preview, timeline and the save button ===== -->
+        <Grid x:Name="EditorPanel" Grid.Row="2" Visibility="Collapsed">
+            <Grid x:Name="EditorContent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Preview -->
+                <Border Grid.Row="0" CornerRadius="10" Background="{StaticResource PreviewBrush}" ClipToBounds="True" MinHeight="140">
+                    <Grid>
+                        <MediaElement x:Name="Player" Stretch="Uniform" />
+
+                        <!-- Shown instead of a picture for sound files -->
+                        <Border x:Name="AudioPlaceholder" Background="{StaticResource AccentSoftBrush}" Visibility="Collapsed">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="♫" FontFamily="Segoe UI Symbol" FontSize="64" HorizontalAlignment="Center"
+                                           Foreground="{StaticResource AccentBrush}" Margin="0,0,0,6" />
+                                <TextBlock Text="Sound file" FontSize="16" HorizontalAlignment="Center" Foreground="{StaticResource SubtleTextBrush}" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Shown when Windows can't preview this particular file -->
+                        <Border x:Name="NoPreviewMessage" Background="{StaticResource SurfaceBrush}" Visibility="Collapsed">
+                            <TextBlock TextWrapping="Wrap" TextAlignment="Center" Foreground="#E6E8EB" FontSize="15" MaxWidth="460"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Text="Windows can't show a preview of this file, but you can still trim it. Use the timeline below to choose the part to keep." />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Timeline -->
+                <TextBlock Grid.Row="1" Margin="0,12,0,4" Foreground="{StaticResource SubtleTextBrush}" FontSize="13"
+                           Text="Drag the blue handles to choose the part you want to KEEP." />
+                <controls:TrimTimeline x:Name="Timeline" Grid.Row="2" Height="92" />
+
+                <!-- Start / kept length / end, each under its part of the timeline -->
+                <Grid Grid.Row="3" Margin="0,6,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
+                        <TextBlock Foreground="{StaticResource SubtleTextBrush}" FontSize="12" Text="Start" />
+                        <TextBlock x:Name="StartText" FontSize="18" FontWeight="SemiBold" Typography.NumeralAlignment="Tabular" />
+                        <Button x:Name="PreviewStartButton" Style="{StaticResource LinkButton}" Content="▶  Preview beginning" Margin="-4,2,0,0"
+                                Click="OnPreviewStartClick" ToolTip="Play from the start of the part you're keeping" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
+                        <TextBlock Foreground="{StaticResource SubtleTextBrush}" FontSize="12" Text="Keeping" HorizontalAlignment="Center" />
+                        <TextBlock x:Name="LengthText" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center"
+                                   Foreground="{StaticResource AccentBrush}" Typography.NumeralAlignment="Tabular" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Right">
+                        <TextBlock Foreground="{StaticResource SubtleTextBrush}" FontSize="12" Text="End" HorizontalAlignment="Right" />
+                        <TextBlock x:Name="EndText" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Right" Typography.NumeralAlignment="Tabular" />
+                        <Button x:Name="PreviewEndButton" Style="{StaticResource LinkButton}" Content="▶  Preview ending" Margin="0,2,-4,0" HorizontalAlignment="Right"
+                                Click="OnPreviewEndClick" ToolTip="Play the last few seconds of the part you're keeping" />
+                    </StackPanel>
+
+                    <!-- Playback and "set here" buttons -->
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button x:Name="PlayButton" Style="{StaticResource RoundButton}" Click="OnPlayClick"
+                                ToolTip="Play / Pause (Space)" AutomationProperties.Name="Play">
+                            <Path x:Name="PlayIconPath" Data="{StaticResource PlayIcon}" Fill="White" Margin="3,0,0,0" />
+                        </Button>
+                        <TextBlock x:Name="PositionText" VerticalAlignment="Center" Margin="12,0,0,0" MinWidth="120"
+                                   FontSize="14" Typography.NumeralAlignment="Tabular" Foreground="{StaticResource SubtleTextBrush}" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="Set start here" Click="OnSetStartClick" Margin="8,0,0,0"
+                                VerticalAlignment="Center" ToolTip="Start the kept part at the current playback position ([ key)" />
+                        <Button Style="{StaticResource SecondaryButton}" Content="Set end here" Click="OnSetEndClick" Margin="8,0,0,0"
+                                VerticalAlignment="Center" ToolTip="End the kept part at the current playback position (] key)" />
+                    </StackPanel>
+                </Grid>
+
+                <!-- Bottom bar: where the copy goes, and the one big action -->
+                <Border Grid.Row="4" Margin="0,14,0,0" Padding="16,10" CornerRadius="8" Background="{StaticResource SurfaceBrush}"
+                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="SAVE TO" Style="{StaticResource SectionLabel}" />
+                            <DockPanel Margin="0,4,0,0" LastChildFill="True">
+                                <Button x:Name="ChangeFolderButton" DockPanel.Dock="Right" Style="{StaticResource SecondaryButton}" Content="Change"
+                                        Padding="12,5" Margin="10,0,0,0" VerticalAlignment="Center" Click="OnChangeFolderClick"
+                                        ToolTip="Choose the folder where trimmed copies are saved" />
+                                <Button x:Name="UseSourceFolderButton" DockPanel.Dock="Right" Style="{StaticResource LinkButton}"
+                                        Content="Use source folder" VerticalAlignment="Center" Margin="8,0,0,0" Visibility="Collapsed"
+                                        Click="OnUseSourceFolderClick" ToolTip="Go back to saving next to the original file" />
+                                <TextBlock x:Name="SaveToText" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" FontSize="13" />
+                            </DockPanel>
+                            <TextBlock x:Name="SaveToProblemText" Foreground="{StaticResource WarningTextBrush}" FontSize="12" Margin="0,3,0,0"
+                                       TextWrapping="Wrap" Visibility="Collapsed"
+                                       Text="This folder can't be found right now. Click Change to pick another one." />
+                        </StackPanel>
+
+                        <Button x:Name="SaveButton" Grid.Column="1" Style="{StaticResource PrimaryButton}" VerticalAlignment="Center"
+                                Content="Save Trimmed Copy" FontSize="16" Padding="26,12" Click="OnSaveClick"
+                                ToolTip="Saves the part you're keeping as a new file. The original is never changed." />
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- ===== Saving: progress card on top of the (disabled) editor ===== -->
+            <Grid x:Name="SavingOverlay" Visibility="Collapsed" Background="{StaticResource ScrimBrush}">
+                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="12" Padding="32,26" Width="420"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock x:Name="SavingText" Text="Saving trimmed copy… 0%" FontSize="18" FontWeight="SemiBold" />
+                        <ProgressBar x:Name="SavingProgress" Style="{StaticResource SaveProgressBar}" Maximum="100" Margin="0,16,0,18" />
+                        <Button x:Name="CancelSaveButton" Style="{StaticResource SecondaryButton}" Content="Cancel"
+                                HorizontalAlignment="Right" Click="OnCancelSaveClick" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- ===== Saved ===== -->
+            <Grid x:Name="DoneOverlay" Visibility="Collapsed" Background="{StaticResource ScrimBrush}">
+                <Border Background="{StaticResource SurfaceBrush}" CornerRadius="12" Padding="32,26" MaxWidth="560" MinWidth="420"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Width="28" Height="28" Margin="0,0,12,0">
+                                <Ellipse Fill="{StaticResource SuccessBrush}" />
+                                <Path Data="M 7,14 L 12,19 L 21,9" Stroke="White" StrokeThickness="2.6" StrokeStartLineCap="Round"
+                                      StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                            </Grid>
+                            <TextBlock Text="Trimmed copy saved" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock x:Name="SavedNameText" FontSize="15" FontWeight="SemiBold" Margin="0,18,0,2" TextWrapping="Wrap" />
+                        <TextBlock x:Name="SavedFolderText" FontSize="13" Foreground="{StaticResource SubtleTextBrush}" TextWrapping="Wrap" />
+                        <StackPanel Orientation="Horizontal" Margin="0,22,0,0">
+                            <Button Style="{StaticResource SecondaryButton}" Content="Open Folder" Click="OnOpenFolderClick" />
+                            <Button Style="{StaticResource PrimaryButton}" Content="Trim Another File" Margin="10,0,0,0"
+                                    FontSize="14" Padding="18,8" Click="OnTrimAnotherClick" />
+                        </StackPanel>
+                        <Button Style="{StaticResource LinkButton}" Content="Back to this file" HorizontalAlignment="Left"
+                                Margin="-4,14,0,0" Click="OnBackToFileClick" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
