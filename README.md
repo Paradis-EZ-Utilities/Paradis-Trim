@@ -9,6 +9,8 @@ That's the whole program.
 > **Your media stays on your computer. Paradis Trim processes files locally and does not upload them.**
 >
 > No account, no internet connection, no telemetry, no ads, no watermark, no limits.
+>
+> Join my Discord if you have any issues; https://discord.gg/AGJ79FQvTm
 
 ## Using it
 
